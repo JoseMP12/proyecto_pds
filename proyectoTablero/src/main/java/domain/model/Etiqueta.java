@@ -12,9 +12,7 @@ public class Etiqueta {
 	public Etiqueta(String cadena) {
 		this(cadena, Color.BLANCO);
 	}
-	
-	public Etiqueta() {}
-	
+		
 	public String getCadena() {
 		return cadena;
 	}

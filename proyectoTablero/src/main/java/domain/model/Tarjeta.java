@@ -1,20 +1,27 @@
 package domain.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
 public abstract class Tarjeta {
+	private UUID id;
 	protected String titulo;
 	protected Color color;
-	protected Etiqueta etiqueta;
+	private List<Etiqueta> etiquetas;
 	protected EstadoTarjeta estado;
 	
-	public Tarjeta(String titulo, Color color, Etiqueta etiqueta, EstadoTarjeta estado) {
+	protected Tarjeta(String titulo) {
+		this.id = UUID.randomUUID();
 		this.titulo = titulo;
-		this.color = color;
-		this.etiqueta = etiqueta;
-		this.estado = estado;
+		this.color = Color.BLANCO;
+		this.etiquetas = new ArrayList<>();
+		this.estado = EstadoTarjeta.INCOMPLETA;
 	}
 	
-	public Tarjeta(String titulo) {
-		this(titulo, Color.BLANCO, new Etiqueta(), EstadoTarjeta.INCOMPLETA);
+	public UUID getId() {
+		return id;
 	}
 	
 	public String getTitulo() {
@@ -25,8 +32,8 @@ public abstract class Tarjeta {
 		return color;
 	}
 	
-	public Etiqueta getEtiqueta() {
-		return etiqueta;
+	public List<Etiqueta> getEtiquetas() {
+		return Collections.unmodifiableList(etiquetas);
 	}
 	
 	public EstadoTarjeta getEstado() {
@@ -41,19 +48,17 @@ public abstract class Tarjeta {
 		this.color = color;
 	}
 	
-	public void setEtiqueta(Etiqueta etiqueta) {
-		this.etiqueta = etiqueta;
-	}
-	
-	public void setEstado(EstadoTarjeta estado) {
-		this.estado = estado;
-	}
-	
 	public boolean isCompletada() {
 		return estado.equals(EstadoTarjeta.COMPLETADA);
 	}
 	
-	/*public addEtiqueta(Etiqueta etiqueta) {
+	public void marcarCompletada() {
+        this.estado = EstadoTarjeta.COMPLETADA;
+    }
+	
+	public void addEtiqueta(Etiqueta etiqueta) {
 		etiquetas.add(etiqueta);
-	}*/
+	}
+	
+    public abstract boolean isChecklist();
 }
