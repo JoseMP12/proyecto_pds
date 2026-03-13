@@ -14,8 +14,6 @@ import domain.ports.input.commands.CrearTarjetaCommand;
 import domain.ports.input.commands.MoverTarjetaCommand;
 import domain.ports.output.TablerosRepository;
 
-/// ESTE TEST FALLA Y NO SÉ POR QUÉ
-
 class MoverTarjetaServiceTest {
 
     private TablerosRepository repo;
@@ -36,15 +34,19 @@ class MoverTarjetaServiceTest {
 
         // Recargar tablero para obtener IDs reales
         Tablero tablero = repo.findByUrl(url).orElseThrow();
-        String idPendientes = tablero.getListas().get(0).getId().toString();
-        String idProceso = tablero.getListas().get(1).getId().toString();
+        String idPendientes = tablero.getListas().stream()
+                .filter(l -> l.getNombre().equals("Pendientes"))
+                .findFirst().get().getId().toString();
+        String idProceso = tablero.getListas().stream()
+                .filter(l -> l.getNombre().equals("En proceso"))
+                .findFirst().get().getId().toString();
 
         service.crearTarjeta(new CrearTarjetaCommand(url, idPendientes, "Tarea X", false));
 
         tablero = repo.findByUrl(url).orElseThrow();
         Tarjeta tarjeta = tablero.getListas().get(0).getTarjetas().get(0);
 
-        service.moverTarjeta(new MoverTarjetaCommand(url, idPendientes, idProceso, tarjeta.getId().toString()));
+        service.moverTarjeta(new MoverTarjetaCommand(url, tarjeta.getId().toString(), idPendientes, idProceso));
 
         tablero = repo.findByUrl(url).orElseThrow();
 
@@ -69,7 +71,7 @@ class MoverTarjetaServiceTest {
         Tarjeta tarjeta = tablero.getListas().get(0).getTarjetas().get(0);
 
         assertThrows(IllegalStateException.class, () -> {
-            service.moverTarjeta(new MoverTarjetaCommand(url, idPendientes, idHecho, tarjeta.getId().toString()));
+            service.moverTarjeta(new MoverTarjetaCommand(url, tarjeta.getId().toString(), idPendientes, idHecho));
         });
     }
 
@@ -96,7 +98,7 @@ class MoverTarjetaServiceTest {
         Tarjeta tarjeta = tablero.getListas().get(0).getTarjetas().get(0);
 
         assertThrows(IllegalStateException.class, () -> {
-            service.moverTarjeta(new MoverTarjetaCommand(url, idPendientes, idRevision, tarjeta.getId().toString()));
+            service.moverTarjeta(new MoverTarjetaCommand(url, tarjeta.getId().toString(), idPendientes, idRevision));
         });
     }
 
@@ -108,15 +110,19 @@ class MoverTarjetaServiceTest {
         service.crearLista(new CrearListaCommand(url, "En proceso", 5));
 
         Tablero tablero = repo.findByUrl(url).orElseThrow();
-        String idPendientes = tablero.getListas().get(0).getId().toString();
-        String idProceso = tablero.getListas().get(1).getId().toString();
+        String idPendientes = tablero.getListas().stream()
+                .filter(l -> l.getNombre().equals("Pendientes"))
+                .findFirst().get().getId().toString();
+        String idProceso = tablero.getListas().stream()
+                .filter(l -> l.getNombre().equals("En proceso"))
+                .findFirst().get().getId().toString();
 
         service.crearTarjeta(new CrearTarjetaCommand(url, idPendientes, "Tarea X", false));
 
         tablero = repo.findByUrl(url).orElseThrow();
         Tarjeta tarjeta = tablero.getListas().get(0).getTarjetas().get(0);
 
-        service.moverTarjeta(new MoverTarjetaCommand(url, idPendientes, idProceso, tarjeta.getId().toString()));
+        service.moverTarjeta(new MoverTarjetaCommand(url, tarjeta.getId().toString(), idPendientes, idProceso));
 
         tablero = repo.findByUrl(url).orElseThrow();
 

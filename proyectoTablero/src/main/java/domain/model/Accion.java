@@ -3,7 +3,7 @@ package domain.model;
 import java.time.LocalDateTime;
 
 public class Accion {
-	// TODO: necesita id
+	// TODO: necesita id para SpringBoot
     private String tipo;
     private String descripcion;
     private LocalDateTime fecha;

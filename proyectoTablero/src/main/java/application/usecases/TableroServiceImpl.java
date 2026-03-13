@@ -66,7 +66,7 @@ public class TableroServiceImpl implements TableroService {
     @Override
     public void moverTarjeta(MoverTarjetaCommand cmd) {
         Tablero tablero = tableroPort.findByUrl(cmd.urlTablero())
-                .orElseThrow();
+			 	.orElseThrow(() -> new IllegalStateException("Tablero no encontrado"));
         tablero.moveTarjeta(cmd.idListaOrigen(), cmd.idListaDestino(), cmd.idTarjeta());
         tableroPort.save(tablero);
     }

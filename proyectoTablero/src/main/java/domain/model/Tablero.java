@@ -75,15 +75,15 @@ public class Tablero {
         Tarjeta tarjeta = origen.getTarjetas().stream()
                 .filter(t -> t.getId().toString().equals(idTarjeta))
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Tarjeta no encontrada en la lista origen"));
+                .orElseThrow(() -> new IllegalStateException("Tarjeta no encontrada en la lista origen."));
         // Validación 1
         if (!destino.getListasObligatorias().isEmpty() &&
             !destino.getListasObligatorias().contains(origen.getNombre())) {
-            throw new IllegalStateException("La tarjeta no ha pasado por las listas obligatorias");
+            throw new IllegalStateException("La tarjeta no ha pasado por las listas obligatorias.");
         }
      // Validación 2
         if (destino.getTarjetas().size() >= destino.getMaxTarjetas()) {
-            throw new IllegalStateException("La lista destino está llena");
+            throw new IllegalStateException("La lista destino está llena.");
         }
 
         origen.removeTarjeta(tarjeta);
